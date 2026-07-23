@@ -1,0 +1,8 @@
+{
+  "name": "openplantbook",
+  "version": "1.0.0",
+  "description": "Schema-first Open Plantbook API skill for plant search, care data, and user-plant writes",
+  "author": {
+    "name": "Slava Pisarevskiy"
+  }
+}

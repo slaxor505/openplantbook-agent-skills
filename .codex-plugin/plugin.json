@@ -1,0 +1,7 @@
+{
+  "name": "openplantbook-agent-skills",
+  "version": "1.0.0",
+  "description": "Open Plantbook Agent Skills for plant search, care data, and authenticated API workflows",
+  "skills": "./skills/"
+}
+

@@ -1,0 +1,14 @@
+{
+  "name": "openplantbook-agent-skills",
+  "description": "Portable Open Plantbook skills for schema-first plant lookup, care data, and authenticated user-plant workflows.",
+  "owner": {
+    "name": "Slava Pisarevskiy"
+  },
+  "plugins": [
+    {
+      "name": "openplantbook",
+      "source": "./plugins/openplantbook",
+      "description": "Schema-first Open Plantbook API skills for reusable plant-care workflows"
+    }
+  ]
+}
