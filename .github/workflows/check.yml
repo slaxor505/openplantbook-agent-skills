@@ -1,0 +1,36 @@
+name: Check skill
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Check skill and manifests
+        run: python3 tools/check.py --no-claude
+
+      - name: Build upload packages
+        run: python3 tools/package.py --skip-check
+
+      - name: Keep packages for download
+        uses: actions/upload-artifact@v4
+        with:
+          name: openplantbook-packages
+          path: dist/
+          retention-days: 14

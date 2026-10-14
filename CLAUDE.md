@@ -14,8 +14,8 @@ Before changing a skill:
 Useful checks:
 
 ```bash
-python3 -m py_compile plugins/openplantbook/skills/openplantbook/scripts/openplantbook_cli.py
-python3 plugins/openplantbook/skills/openplantbook/scripts/openplantbook_cli.py --help
+python3 tools/check.py
+python3 skills/openplantbook/scripts/openplantbook_cli.py --help
 ```
 
 If `npx skills-ref` is already available, use it for structure validation. Do not install packages without explicit user approval.

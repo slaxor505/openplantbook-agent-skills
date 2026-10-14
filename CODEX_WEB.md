@@ -8,7 +8,7 @@ Use this file as the Codex web entry point when the repository is connected at `
 2. Start tasks from the repository root.
 3. Let Codex read `AGENTS.md` for repo conventions.
 4. Use the repo-scoped skill at `.agents/skills/openplantbook`, which points to the canonical `skills/openplantbook` folder.
-5. If using Codex plugin installation, use the repo marketplace at `.agents/plugins/marketplace.json` or the plugin folder at `plugins/openplantbook`.
+5. If using Codex plugin installation, use the repo marketplace at `.agents/plugins/marketplace.json`. The repository root is the plugin.
 
 ## Invocation
 
@@ -28,7 +28,7 @@ Read skills/openplantbook/SKILL.md and follow it as the Open Plantbook workflow 
 
 - Do not duplicate Open Plantbook workflow logic in Codex-only instructions.
 - Treat `skills/openplantbook/SKILL.md` as canonical.
-- Use `.codex-plugin/plugin.json` and `plugins/openplantbook/.codex-plugin/plugin.json` only as packaging/discovery metadata.
+- Use `.codex-plugin/plugin.json` only as packaging/discovery metadata.
 - Keep credentials outside the repository.
 
 ## Useful Files
@@ -37,6 +37,5 @@ Read skills/openplantbook/SKILL.md and follow it as the Open Plantbook workflow 
 - `.agents/skills/openplantbook`: Codex repo-scope skill symlink.
 - `.agents/plugins/marketplace.json`: repo-local plugin marketplace entry.
 - `.codex-plugin/plugin.json`: root Codex plugin manifest.
-- `plugins/openplantbook/.codex-plugin/plugin.json`: plugin-level Codex manifest.
 - `skills/openplantbook/SKILL.md`: canonical skill instructions.
 
