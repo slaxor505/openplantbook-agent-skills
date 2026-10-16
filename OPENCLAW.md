@@ -6,7 +6,7 @@ This repository is shaped so OpenClaw can consume the plain skill directory:
 skills/openplantbook/
 ```
 
-The plugin copy at `plugins/openplantbook/skills/openplantbook/` is kept for multi-agent plugin packaging and should stay in sync with the top-level skill mirror.
+This is the only copy of the skill. Plugin manifests for other tools sit at the repository root and point to it.
 
 ## Local Install
 
@@ -29,7 +29,6 @@ If OpenClaw cannot infer the nested skill path from a Git install, clone the rep
 ```bash
 openclaw skills info openplantbook --agent main
 openclaw skills check --agent main
-python3 plugins/openplantbook/skills/openplantbook/scripts/openplantbook_cli.py --help
 python3 skills/openplantbook/scripts/openplantbook_cli.py --help
 ```
 
@@ -68,8 +67,7 @@ The skill includes a ClawHub-style `skill-card.md` next to `SKILL.md`.
 Before publishing, review:
 
 ```text
-plugins/openplantbook/skills/openplantbook/references/publish-notes.md
-plugins/openplantbook/skills/openplantbook/skill-card.md
+skills/openplantbook/references/publish-notes.md
 skills/openplantbook/skill-card.md
 ```
 

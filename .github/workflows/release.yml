@@ -1,0 +1,39 @@
+name: Release packages
+
+# Push a tag such as v1.0.0 to build the upload ZIPs and attach them to a GitHub release.
+# The tag must match the version in the manifests and SKILL.md.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Check skill and manifests
+        run: python3 tools/check.py --no-claude --tag "$GITHUB_REF_NAME"
+
+      - name: Build upload packages
+        run: python3 tools/package.py --skip-check
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create "$GITHUB_REF_NAME"
+          dist/*.zip dist/SHA256SUMS
+          --title "$GITHUB_REF_NAME"
+          --generate-notes

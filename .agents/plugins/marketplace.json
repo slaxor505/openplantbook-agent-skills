@@ -1,22 +1,20 @@
 {
   "name": "openplantbook-agent-skills",
+  "interface": {
+    "displayName": "Open Plantbook Agent Skills"
+  },
   "plugins": [
     {
       "name": "openplantbook",
       "source": {
         "source": "local",
-        "path": "./plugins/openplantbook"
+        "path": "./"
       },
       "policy": {
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Developer Tools",
-      "interface": {
-        "displayName": "Open Plantbook",
-        "description": "Schema-first Open Plantbook API workflows for plant search, care data, and user-plant writes."
-      }
+      "category": "Developer Tools"
     }
   ]
 }
-

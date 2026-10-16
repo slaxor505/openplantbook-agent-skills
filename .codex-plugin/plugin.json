@@ -1,7 +1,36 @@
 {
-  "name": "openplantbook-agent-skills",
+  "name": "openplantbook",
   "version": "1.0.0",
-  "description": "Open Plantbook Agent Skills for plant search, care data, and authenticated API workflows",
-  "skills": "./skills/"
+  "description": "Schema-first Open Plantbook API skill: search plants, read care thresholds, and manage user plants.",
+  "author": {
+    "name": "Slava Pisarevskiy",
+    "url": "https://github.com/slaxor505"
+  },
+  "homepage": "https://open.plantbook.io/docs/",
+  "repository": "https://github.com/slaxor505/openplantbook-agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "plants",
+    "openplantbook",
+    "plant-care",
+    "api",
+    "home-assistant"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Open Plantbook",
+    "shortDescription": "Search plants and read care data from the Open Plantbook API",
+    "longDescription": "Search the Open Plantbook plant-care database by scientific or common name, read care thresholds such as light, temperature, soil moisture and humidity, and create, update or delete your own user plants. The skill reads the live OpenAPI schema before schema-sensitive work, keeps credentials out of output, and asks before any write or delete.",
+    "developerName": "Slava Pisarevskiy",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://open.plantbook.io/",
+    "supportURL": "https://github.com/slaxor505/openplantbook-agent-skills/issues",
+    "defaultPrompt": [
+      "Use Open Plantbook to find Monstera deliciosa and show its care fields.",
+      "Look up abelia chinensis in Open Plantbook in English.",
+      "Create an Open Plantbook user plant from this dossier JSON."
+    ],
+    "brandColor": "#2F855A"
+  }
 }
-

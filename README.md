@@ -8,13 +8,14 @@ Reusable Agent Skills for working with the [Open Plantbook](https://open.plantbo
 
 Author: Slava Pisarevskiy.
 
-This repository packages the `openplantbook` skill in several compatible discovery shapes:
+The repository root is one plugin with one skill. The same files serve every marketplace:
 
-- `skills/openplantbook/`: direct skill folder for OpenClaw and tools that expect a top-level `skills/` directory.
-- `plugins/openplantbook/skills/openplantbook/`: plugin-style layout for Agent Skills repositories, modeled after multi-skill repos such as Ping Identity's `ping-sdk-agent-skills`.
+- `skills/openplantbook/`: the skill. Tools that read `SKILL.md` folders (skills.sh, `gh skill`, OpenClaw, Gemini CLI, Copilot, Cursor) find it here.
+- `.claude-plugin/`: Claude Code plugin and marketplace manifests. Also accepted by Anthropic's directory.
+- `.codex-plugin/` and `.agents/plugins/`: OpenAI (ChatGPT and Codex) plugin manifest and repo marketplace.
 - `.agents/skills/openplantbook`: Codex repo-scoped skill pointer for Codex surfaces that scan `.agents/skills`.
 
-The actual workflow logic still lives in one canonical skill folder: `skills/openplantbook`. Plugin and web files are adapters that point back to it.
+The workflow logic lives only in `skills/openplantbook`. Plugin and web files are adapters that point back to it. See [PUBLISHING.md](PUBLISHING.md) for how to publish to each marketplace.
 
 ## What This Is
 
@@ -97,6 +98,26 @@ The agent should not:
 │   │   └── marketplace.json
 │   └── skills/
 │       └── openplantbook -> ../../skills/openplantbook
+├── .github/
+│   └── workflows/
+│       ├── check.yml
+│       └── release.yml
+├── adapters/
+│   ├── anthropic-claude-web.md
+│   └── openai-codex-web.md
+├── skills/
+│   └── openplantbook/
+│       ├── SKILL.md
+│       ├── agents/
+│       │   └── openai.yaml
+│       ├── references/
+│       │   └── publish-notes.md
+│       ├── scripts/
+│       │   └── openplantbook_cli.py
+│       └── skill-card.md
+├── tools/
+│   ├── check.py
+│   └── package.py
 ├── AGENTS.md
 ├── CLAUDE.md
 ├── CLAUDE_WEB.md
@@ -104,44 +125,17 @@ The agent should not:
 ├── CONTRIBUTING.md
 ├── LICENSE
 ├── OPENCLAW.md
-├── README.md
-├── adapters/
-│   ├── anthropic-claude-web.md
-│   └── openai-codex-web.md
-├── plugins/
-│   └── openplantbook/
-│       ├── .claude-plugin/
-│       │   └── plugin.json
-│       ├── .codex-plugin/
-│       │   └── plugin.json
-│       ├── README.md
-│       └── skills/
-│           └── openplantbook/
-│               ├── SKILL.md
-│               ├── agents/
-│               │   └── openai.yaml
-│               ├── references/
-│               │   └── publish-notes.md
-│               ├── scripts/
-│               │   └── openplantbook_cli.py
-│               └── skill-card.md
-└── skills/
-    └── openplantbook/
-        ├── SKILL.md
-        ├── agents/
-        │   └── openai.yaml
-        ├── references/
-        │   └── publish-notes.md
-        ├── scripts/
-        │   └── openplantbook_cli.py
-        └── skill-card.md
+├── PUBLISHING.md
+└── README.md
 ```
 
 Key files:
 
-- [skills/openplantbook/SKILL.md](skills/openplantbook/SKILL.md): direct OpenClaw/local skill entry point.
-- [plugins/openplantbook/skills/openplantbook/SKILL.md](plugins/openplantbook/skills/openplantbook/SKILL.md): plugin-packaged skill entry point.
-- [scripts/openplantbook_cli.py](skills/openplantbook/scripts/openplantbook_cli.py): dependency-free helper for search, detail, and create workflows.
+- [skills/openplantbook/SKILL.md](skills/openplantbook/SKILL.md): the skill entry point.
+- [skills/openplantbook/scripts/openplantbook_cli.py](skills/openplantbook/scripts/openplantbook_cli.py): dependency-free helper for search, detail, and create workflows.
+- [PUBLISHING.md](PUBLISHING.md): how to publish to each marketplace, with open items.
+- [tools/check.py](tools/check.py): validates the skill, manifests, and package hygiene.
+- [tools/package.py](tools/package.py): builds the upload ZIPs in `dist/`.
 - [CODEX_WEB.md](CODEX_WEB.md): OpenAI Codex web bridge.
 - [CLAUDE_WEB.md](CLAUDE_WEB.md): Anthropic Claude web Project Instructions / Project Knowledge bridge.
 - [OPENCLAW.md](OPENCLAW.md): OpenClaw install, credential, and ClawHub notes.
@@ -150,19 +144,15 @@ Key files:
 
 ## Supported Agent Surfaces
 
-This repository includes scaffolding for several agent ecosystems:
-
 | Surface | Files | Notes |
 |---------|-------|-------|
-| Generic Agent Skills | `SKILL.md`, `references/`, `scripts/` | Portable skill contents |
-| Skills CLI / plugin-style repos | `plugins/openplantbook/skills/openplantbook` | Layout follows common multi-skill repository structure |
+| Agent Skills tools (skills.sh, `gh skill`, Gemini CLI, Copilot, Cursor, and others) | `skills/openplantbook` | Portable skill folder |
+| Anthropic directory, Claude Code, claude.ai plugins | `.claude-plugin/` | Plugin and marketplace manifests. The repo root is the plugin folder |
+| claude.ai skill upload | `dist/openplantbook-skill-<version>.zip` | Built by `tools/package.py` |
+| OpenAI ChatGPT and Codex plugins | `.codex-plugin/`, `.agents/plugins/marketplace.json` | Listing text and repo marketplace. Upload ZIP built by `tools/package.py` |
 | OpenAI Codex web | `AGENTS.md`, `.agents/skills/openplantbook`, `CODEX_WEB.md` | Use repo instructions plus the repo-scoped skill pointer; fall back to explicitly reading `skills/openplantbook/SKILL.md` |
-| Codex plugins | `.codex-plugin/`, `plugins/openplantbook/.codex-plugin/`, `.agents/plugins/marketplace.json` | Plugin packaging and repo-local marketplace metadata |
 | Anthropic Claude web | `CLAUDE_WEB.md`, `README.md`, `skills/openplantbook/SKILL.md` | Use Claude Project Instructions / Project Knowledge rather than duplicating the skill |
-| Claude-compatible plugin metadata | `.claude-plugin/`, `plugins/openplantbook/.claude-plugin/` | Marketplace and plugin metadata |
-| OpenClaw | `skills/openplantbook`, `OPENCLAW.md`, `skill-card.md` | Direct local install and ClawHub publication notes |
-
-Other tools that understand Agent Skills can usually consume either the direct `skills/openplantbook` folder or the plugin path under `plugins/openplantbook/skills/openplantbook`.
+| OpenClaw / ClawHub | `skills/openplantbook`, `OPENCLAW.md`, `skill-card.md` | Direct local install and ClawHub publication notes |
 
 ## Web Agent Setup
 
@@ -193,25 +183,50 @@ For both web agents, do not create a separate Open Plantbook workflow. Keep the 
 
 ## Installation
 
-### Agent Skills CLI
+Pick the tool you use. [PUBLISHING.md](PUBLISHING.md) lists every marketplace and how to submit.
 
-From a future GitHub repository:
+### Claude Code
+
+```text
+/plugin install openplantbook --marketplace slaxor505/openplantbook-agent-skills
+```
+
+On Claude Code older than 2.1.275, add the marketplace first:
+
+```text
+/plugin marketplace add slaxor505/openplantbook-agent-skills
+/plugin install openplantbook@openplantbook-agent-skills
+```
+
+### ChatGPT and Codex
+
+```bash
+codex plugin marketplace add slaxor505/openplantbook-agent-skills
+```
+
+Then open `/plugins` in Codex and install Open Plantbook.
+
+### Agent Skills CLI (skills.sh)
 
 ```bash
 npx skills add slaxor505/openplantbook-agent-skills
 ```
 
-Install only the Open Plantbook plugin:
+Install into specific tools:
 
 ```bash
-npx skills add slaxor505/openplantbook-agent-skills/plugins/openplantbook
+npx skills add slaxor505/openplantbook-agent-skills -a claude-code -a codex -a github-copilot -a cursor -a gemini-cli
 ```
 
-Install only the skill:
+### GitHub CLI
 
 ```bash
-npx skills add slaxor505/openplantbook-agent-skills/plugins/openplantbook/skills/openplantbook
+gh skill install slaxor505/openplantbook-agent-skills openplantbook
 ```
+
+### claude.ai
+
+Build the skill ZIP with `python3 tools/package.py`, then upload `dist/openplantbook-skill-<version>.zip` in **Settings** → **Features** → **Skills**. The skill needs network access to `open.plantbook.io`.
 
 ### OpenClaw
 
@@ -223,7 +238,7 @@ openclaw skills info openplantbook --agent main
 openclaw skills check --agent main
 ```
 
-From a future GitHub repository:
+From GitHub:
 
 ```bash
 openclaw skills install git:https://github.com/slaxor505/openplantbook-agent-skills.git --agent main --as openplantbook
@@ -237,12 +252,6 @@ For runtimes that consume plain skill folders:
 
 ```bash
 cp -r skills/openplantbook /path/to/agent/skills/
-```
-
-Or use the plugin copy:
-
-```bash
-cp -r plugins/openplantbook/skills/openplantbook /path/to/agent/skills/
 ```
 
 ## Credential Configuration
@@ -284,11 +293,17 @@ python3 skills/openplantbook/scripts/openplantbook_cli.py detail "monstera delic
 python3 skills/openplantbook/scripts/openplantbook_cli.py create --from-dossier plant_dossiers/chlorophytum_orchidastrum.json
 ```
 
-Use the plugin-path helper:
+## What The Skill Runs And Sends
 
-```bash
-python3 plugins/openplantbook/skills/openplantbook/scripts/openplantbook_cli.py search "abelia"
-```
+The skill is instructions plus one helper script. This is everything the helper does:
+
+- **Runs:** `python3 skills/openplantbook/scripts/openplantbook_cli.py`. It uses the Python standard library only. It installs no packages, downloads no code, starts no other programs, and writes no files.
+- **Network:** HTTPS requests to `https://open.plantbook.io` only. The host is fixed in the script and cannot be changed by an environment variable. Paths used: `/api/v1/plant/search`, `/api/v1/plant/detail/{pid}/`, `/api/schema/`, `/api/v1/token/`, and `/api/v1/plant/create`.
+- **Sends:** the search text, plant IDs, and plant fields the user asks for. Credentials go only to that host, as an `Authorization` header, or as a client ID and secret sent to the token endpoint.
+- **Reads:** the `OPENPLANTBOOK_*` environment variables, the private env file named by `OPENPLANTBOOK_ENV_FILE` (only the four credential names are read from it), and the dossier JSON file the user names for `create`.
+- **Never:** prints credentials, reads shell history or logs, or scrapes Open Plantbook web pages.
+
+Update and delete calls are described in `SKILL.md` as direct HTTP calls the agent makes with the user's approval. The helper script does not do them.
 
 ## Safety Model
 
@@ -304,93 +319,45 @@ The skill is intentionally conservative:
 
 ## Development Best Practices
 
-This repository follows the patterns used by mature Agent Skills repositories:
-
-- Keep `SKILL.md` concise and trigger-focused.
+- Keep `SKILL.md` concise and trigger-focused. The `description` is the only text agents see before they pick a skill, so it must say what the skill does and when to use it.
+- Use paths relative to the skill folder in `SKILL.md`. Do not use tool-specific placeholders.
 - Put detailed or publication-specific notes in `references/`.
 - Put deterministic repeated logic in `scripts/`.
 - Keep generated files, caches, logs, credentials, and local dossiers out of git.
-- Maintain both README inventory tables and plugin README files when adding skills.
-- Keep direct and plugin skill copies synchronized.
-- Validate frontmatter and helper scripts before handoff.
-- Do not install new validation tools unless the user explicitly approves installation.
-
-When changing the skill, edit one copy first, then mirror it:
-
-```bash
-rsync -a --delete skills/openplantbook/ plugins/openplantbook/skills/openplantbook/
-```
-
-Or mirror the other direction if the plugin copy is the source of truth:
-
-```bash
-rsync -a --delete plugins/openplantbook/skills/openplantbook/ skills/openplantbook/
-```
-
-Never mirror secrets, generated caches, private test data, or local environment files.
+- There is one copy of the skill, in `skills/openplantbook/`. Do not add a second copy.
+- Bump the version in `SKILL.md`, `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json` together before a release.
+- Run `python3 tools/check.py` before every push. CI runs it on every pull request.
 
 ## Validation
 
 Run from the repository root:
 
 ```bash
-python3 skills/openplantbook/scripts/openplantbook_cli.py --help
-python3 plugins/openplantbook/skills/openplantbook/scripts/openplantbook_cli.py --help
-diff -qr skills/openplantbook plugins/openplantbook/skills/openplantbook
-find . -name '__pycache__' -o -name '*.pyc'
+python3 tools/check.py
 ```
 
-Validate Python syntax without leaving bytecode behind:
+It needs PyYAML (`pip install pyyaml`). It checks:
+
+- `SKILL.md` frontmatter against the [Agent Skills spec](https://agentskills.io/specification) and the claude.ai name rules.
+- Plugin and marketplace manifests: valid JSON, matching names and versions, required listing fields.
+- Package hygiene: README length and LICENSE, no symlinks except the Codex pointer, no cache or credential files, no files over 256 KiB, no binaries.
+- A scan for hard-coded secrets and local file paths.
+- The helper script: syntax and `--help`.
+- `claude plugin validate`, when the `claude` CLI is installed.
+
+Build the upload ZIPs:
 
 ```bash
-python3 - <<'PY'
-from pathlib import Path
-import ast
-for path in [
-    Path("skills/openplantbook/scripts/openplantbook_cli.py"),
-    Path("plugins/openplantbook/skills/openplantbook/scripts/openplantbook_cli.py"),
-]:
-    ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-print("python syntax ok")
-PY
-```
-
-Validate YAML frontmatter and plugin JSON:
-
-```bash
-python3 - <<'PY'
-from pathlib import Path
-import json
-import yaml
-
-skill_paths = [
-    *Path("skills").glob("*/SKILL.md"),
-    *Path("plugins").glob("*/skills/*/SKILL.md"),
-]
-for path in skill_paths:
-    text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
-        raise SystemExit(f"missing frontmatter: {path}")
-    data = yaml.safe_load(text.split("---", 2)[1])
-    if data.get("name") != path.parent.name:
-        raise SystemExit(f"name mismatch: {path}")
-
-json_paths = [
-    *Path(".").glob(".*-plugin/*.json"),
-    *Path("plugins").glob("*/.*-plugin/*.json"),
-]
-for path in json_paths:
-    json.loads(path.read_text(encoding="utf-8"))
-
-print("frontmatter and plugin json ok")
-PY
+python3 tools/package.py   # writes dist/
 ```
 
 If the Agent Skills reference validator is already installed:
 
 ```bash
-npx skills-ref validate ./plugins/openplantbook/skills/openplantbook
+npx skills-ref validate ./skills/openplantbook
 ```
+
+It may warn about the nested `metadata.openclaw` block. That block is required by ClawHub and OpenClaw (see [PUBLISHING.md](PUBLISHING.md#known-trade-offs)).
 
 If OpenClaw is available and you intentionally want to install locally:
 
@@ -402,22 +369,14 @@ openclaw skills check --agent main
 
 ## Publishing Notes
 
-Before any ClawHub/OpenClaw Hub publish or republish, run the security review gate in the publish notes. This is required for the package to be ready for OpenClaw Hub security review.
+Read [PUBLISHING.md](PUBLISHING.md) first. It covers the Anthropic directory, OpenAI, claude.ai, skills.sh, GitHub `gh skill`, ClawHub, and others, plus the open items only the maintainer can do.
 
-For ClawHub/OpenClaw publication, review:
+Before any ClawHub/OpenClaw Hub publish or republish, run the security review gate in [skills/openplantbook/references/publish-notes.md](skills/openplantbook/references/publish-notes.md). Also see [skills/openplantbook/skill-card.md](skills/openplantbook/skill-card.md) and [OPENCLAW.md](OPENCLAW.md).
 
-- [skills/openplantbook/skill-card.md](skills/openplantbook/skill-card.md)
-- [skills/openplantbook/references/publish-notes.md](skills/openplantbook/references/publish-notes.md)
-- [OPENCLAW.md](OPENCLAW.md)
+Manifest files:
 
-For plugin-style publication, review:
-
-- [.codex-plugin/plugin.json](.codex-plugin/plugin.json)
-- [.agents/plugins/marketplace.json](.agents/plugins/marketplace.json)
-- [plugins/openplantbook/.codex-plugin/plugin.json](plugins/openplantbook/.codex-plugin/plugin.json)
-- [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json)
-- [.claude-plugin/plugin.json](.claude-plugin/plugin.json)
-- [plugins/openplantbook/.claude-plugin/plugin.json](plugins/openplantbook/.claude-plugin/plugin.json)
+- [.claude-plugin/plugin.json](.claude-plugin/plugin.json) and [.claude-plugin/marketplace.json](.claude-plugin/marketplace.json)
+- [.codex-plugin/plugin.json](.codex-plugin/plugin.json) and [.agents/plugins/marketplace.json](.agents/plugins/marketplace.json)
 
 Do not add fake installed-origin metadata. Files such as `.clawhub/origin.json` should be created by actual install or publish flows.
 

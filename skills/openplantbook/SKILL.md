@@ -1,9 +1,8 @@
 ---
-name: "openplantbook"
-description: "Open Plantbook API workflows with schema-first plant search, detail, and user-plant writes."
-homepage: https://open.plantbook.io/docs/
-user-invocable: true
+name: openplantbook
+description: Search the Open Plantbook plant-care database, retrieve plant details and care thresholds (light, temperature, soil moisture, soil EC, humidity), and create, update or delete user plants through the official Open Plantbook API with a schema-first workflow. Use when the user asks about Open Plantbook, plant lookup by scientific or common name, plant-care thresholds, multilingual plant aliases, or authenticated Open Plantbook plant workflows.
 license: MIT
+compatibility: Requires Python 3 and outbound HTTPS access to open.plantbook.io. API calls need Open Plantbook credentials in environment variables. Does not work in sandboxes without network access, such as the Claude API code execution tool.
 metadata:
   author: Slava Pisarevskiy
   version: "1.0.0"
@@ -13,6 +12,8 @@ metadata:
 # Open Plantbook
 
 Use this skill when the user asks about Open Plantbook, plant-care thresholds, plant lookup by scientific/common name, plant details, multilingual aliases, creating/updating/deleting Open Plantbook user plants, or authenticated Open Plantbook plant workflows.
+
+Paths such as `scripts/openplantbook_cli.py` are relative to this skill's folder, the folder that contains this `SKILL.md`.
 
 Open Plantbook is a community-sourced plant-care database. Its API supports API-key token authentication and OAuth2 client credentials. This skill uses direct HTTP against the live API schema; it does not require or depend on an SDK.
 
@@ -111,7 +112,7 @@ Query parameters:
 Preferred helper path:
 
 ```bash
-python3 {baseDir}/scripts/openplantbook_cli.py search "abelia"
+python3 scripts/openplantbook_cli.py search "abelia"
 ```
 
 If constructing HTTP directly, encode UTF-8 safely and preserve pagination fields. The result may match common names without telling you which field matched, so mention potential ambiguity when names look surprising.
@@ -131,7 +132,7 @@ Parameters:
 Preferred helper path:
 
 ```bash
-python3 {baseDir}/scripts/openplantbook_cli.py detail "abelia chinensis" --lang en --include care
+python3 scripts/openplantbook_cli.py detail "abelia chinensis" --lang en --include care
 ```
 
 If the caller has a user plant with the PID, the customized user plant is returned with `user_plant: true`; otherwise the public plant is returned.
@@ -173,7 +174,7 @@ A live urllib request without an explicit user agent was blocked by Cloudflare w
 For dossier-based creation, prefer the helper:
 
 ```bash
-python3 {baseDir}/scripts/openplantbook_cli.py create --from-dossier plant_dossiers/chlorophytum_orchidastrum.json
+python3 scripts/openplantbook_cli.py create --from-dossier plant_dossiers/chlorophytum_orchidastrum.json
 ```
 
 The dossier JSON must already use `PlantCreateRequest` field names. The helper does not rename legacy dossier fields such as `min_temp_c` or `min_soil_ec_uScm`; fields that are not in the live create schema are ignored and reported. It validates types and numeric bounds, requires `display_pid`, and truncates overlong string fields to schema `maxLength` for the outgoing payload unless `--no-truncate` is supplied.
@@ -259,13 +260,13 @@ When explicitly asked to help build or debug an Open Plantbook sensor uploader:
 - Register the plant instance first with `POST /api/v1/sensor-data/instance`, binding `pid` plus a device/app `custom_id`.
 - Use the returned plant-instance UUID in JTS upload columns; sensor upload binds to the instance UUID, not directly to the plant PID.
 - Upload JSON Time Series data to `POST /api/v1/sensor-data/upload`; use `dry_run=true` while testing integrations.
-
-## Publishing and maintenance
-
-When preparing this skill for ClawHub/OpenClaw Hub publication, read `{baseDir}/references/publish-notes.md` for the package checklist, suggested listing copy, validation commands, and release command template.
 - Validate supported measurement names and units before upload: `temp` in deg C, `soil_ec` in uS/cm, `env_humid` in %, `soil_moist` in %, and `light_lux` in lux.
 - Preserve ISO 8601 timestamps with timezone offsets.
 - Avoid uploading bogus values. Preserve privacy: include location only when the user explicitly opted in.
+
+## Publishing and maintenance
+
+When preparing this skill for ClawHub/OpenClaw Hub publication, read `references/publish-notes.md` for the package checklist, suggested listing copy, validation commands, and release command template.
 
 ## Safety and privacy
 
@@ -280,9 +281,9 @@ When preparing this skill for ClawHub/OpenClaw Hub publication, read `{baseDir}/
 This skill folder includes `scripts/openplantbook_cli.py` for quick CLI workflows:
 
 ```bash
-python3 skills/openplantbook/scripts/openplantbook_cli.py search "abelia"
-python3 skills/openplantbook/scripts/openplantbook_cli.py detail "abelia chinensis" --lang en --include care
-python3 skills/openplantbook/scripts/openplantbook_cli.py create --from-dossier plant_dossiers/chlorophytum_orchidastrum.json --dry-run
+python3 scripts/openplantbook_cli.py search "abelia"
+python3 scripts/openplantbook_cli.py detail "abelia chinensis" --lang en --include care
+python3 scripts/openplantbook_cli.py create --from-dossier plant_dossiers/chlorophytum_orchidastrum.json --dry-run
 ```
 
 The helper is direct-HTTP only. It does not depend on `openplantbook-sdk`. It supports read-only `search`/`detail` plus OAuth-backed `create --from-dossier`; use schema-backed direct HTTP for update/delete and advanced integration tasks.

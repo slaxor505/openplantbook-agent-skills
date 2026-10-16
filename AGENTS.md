@@ -1,55 +1,63 @@
 # AGENTS.md
 
-This repository contains Agent Skills content, not a deployable runtime app. Most work here is documentation and helper maintenance under `plugins/`.
+This repository contains Agent Skills content, not a deployable runtime app. Most work here is documentation, manifests, and helper maintenance for the skill under `skills/`.
 
 ## Start Here
 
 1. Read [README.md](README.md) for repository purpose and skill inventory.
 2. Read [CONTRIBUTING.md](CONTRIBUTING.md) before creating or changing a skill.
-3. Read plugin docs at [plugins/openplantbook/README.md](plugins/openplantbook/README.md) when working in the Open Plantbook plugin.
+3. Read [PUBLISHING.md](PUBLISHING.md) before changing manifests or publishing to a marketplace.
 
 ## Repository Map
 
-- `plugins/openplantbook/skills/<skill-name>/SKILL.md`: required entry point for each skill.
-- `plugins/openplantbook/skills/<skill-name>/references/`: detailed docs that `SKILL.md` should link to.
-- `plugins/openplantbook/skills/<skill-name>/assets/`: templates used by generated outputs, if needed.
-- `plugins/openplantbook/skills/<skill-name>/scripts/`: helper scripts.
-- `plugins/openplantbook/skills/<skill-name>/skill-card.md`: OpenClaw/ClawHub listing card.
-- `.claude-plugin/plugin.json`: root plugin package metadata.
-- `.claude-plugin/marketplace.json`: root plugin listing for multi-plugin installers.
-- `plugins/<plugin>/.claude-plugin/plugin.json`: plugin-level Claude metadata.
-- `.codex-plugin/plugin.json`: root Codex plugin metadata.
+The repository root is one plugin. There is one copy of the skill.
+
+- `skills/<skill-name>/SKILL.md`: required entry point for each skill.
+- `skills/<skill-name>/references/`: detailed docs that `SKILL.md` should link to.
+- `skills/<skill-name>/assets/`: templates used by generated outputs, if needed.
+- `skills/<skill-name>/scripts/`: helper scripts.
+- `skills/<skill-name>/skill-card.md`: OpenClaw/ClawHub listing card.
+- `.claude-plugin/plugin.json`: Claude Code / Anthropic directory plugin manifest.
+- `.claude-plugin/marketplace.json`: Claude Code marketplace listing (source `./`).
+- `.codex-plugin/plugin.json`: OpenAI (ChatGPT and Codex) plugin manifest and listing text.
 - `.agents/plugins/marketplace.json`: repo-local Codex plugin marketplace entry.
-- `.agents/skills/openplantbook`: repo-scoped Codex skill pointer to `skills/openplantbook`.
+- `.agents/skills/openplantbook`: repo-scoped Codex skill pointer (symlink) to `skills/openplantbook`.
+- `tools/check.py`: validates the skill, manifests, and package hygiene.
+- `tools/package.py`: builds upload ZIPs in `dist/` (not committed).
+- `.github/workflows/`: `check.yml` runs the checks on pull requests; `release.yml` attaches ZIPs to a release when a `v*` tag is pushed.
+- `PUBLISHING.md`: per-marketplace publishing steps and open items.
 - `CODEX_WEB.md`: Codex web usage bridge.
 - `CLAUDE_WEB.md`: Claude web Project Instructions / Project Knowledge bridge.
 - `OPENCLAW.md`: OpenClaw install, credential, and ClawHub notes.
-- `skills/openplantbook/`: direct top-level mirror of the Open Plantbook skill for OpenClaw/local installs.
 
 ## Commands Agents Should Run
 
-- Validate YAML frontmatter:
-  - `python3 - <<'PY' ...`
-- Validate helper syntax:
-  - `python3 -m py_compile plugins/openplantbook/skills/openplantbook/scripts/openplantbook_cli.py`
+- Validate everything (frontmatter, manifests, hygiene, secrets, helper):
+  - `python3 tools/check.py`
+- Validate helper syntax only:
+  - `python3 -m py_compile skills/openplantbook/scripts/openplantbook_cli.py`
 - Smoke-test helper interface:
-  - `python3 plugins/openplantbook/skills/openplantbook/scripts/openplantbook_cli.py --help`
-- If available locally, validate with the Agent Skills reference CLI:
-  - `npx skills-ref validate ./plugins/openplantbook/skills/openplantbook`
+  - `python3 skills/openplantbook/scripts/openplantbook_cli.py --help`
+- Build upload packages:
+  - `python3 tools/package.py`
+- If available locally, validate with the Agent Skills reference CLI (it may warn about the nested `metadata.openclaw` block, which ClawHub requires):
+  - `npx skills-ref validate ./skills/openplantbook`
 
-Do not install dependencies just to validate this repository unless the user explicitly asks.
+`tools/check.py` needs PyYAML. Do not install dependencies just to validate this repository unless the user explicitly asks.
 
 ## Required Conventions
 
 1. Keep `SKILL.md` concise; move deep details into `references/` and link them.
-2. Include YAML frontmatter in every `SKILL.md`.
-3. `name` in frontmatter must match the skill directory name exactly.
+2. Include YAML frontmatter in every `SKILL.md`. Allowed keys are `name`, `description`, `license`, `compatibility`, `metadata`, and `allowed-tools`. `metadata` values are strings, except the `openclaw` block that ClawHub reads.
+3. `name` in frontmatter must match the skill directory name exactly. Do not put `claude` or `anthropic` in a skill name.
 4. Allowed subdirectories inside a skill are `agents`, `assets`, `references`, and `scripts`. OpenClaw/ClawHub metadata should be files such as `skill-card.md` unless generated by an actual install/publish flow.
-5. When adding or renaming a skill, update both [README.md](README.md) and [plugins/openplantbook/README.md](plugins/openplantbook/README.md).
-6. Never commit credentials, local env files, generated logs, private dossiers, or session transcripts.
-7. Keep `skills/openplantbook/` and `plugins/openplantbook/skills/openplantbook/` synchronized when changing the skill contents.
-8. Keep web adapters thin. Codex web and Claude web files should point to the canonical skill instead of duplicating Open Plantbook workflow logic.
-9. Before any ClawHub/OpenClaw Hub publish or republish, run the security review gate in `references/publish-notes.md`; do not publish while unresolved secret/path findings remain.
+5. Use paths relative to the skill folder inside `SKILL.md`. Do not use tool-specific placeholders such as `{baseDir}`.
+6. When adding or renaming a skill, update [README.md](README.md) and the manifests, and run `python3 tools/check.py`.
+7. Never commit credentials, local env files, generated logs, private dossiers, or session transcripts.
+8. Do not add a second copy of the skill. Do not add symlinks other than `.agents/skills/openplantbook`; marketplace validators reject them.
+9. Keep the version equal in `skills/openplantbook/SKILL.md`, `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json`.
+10. Keep web adapters thin. Codex web and Claude web files should point to the canonical skill instead of duplicating Open Plantbook workflow logic.
+11. Before any ClawHub/OpenClaw Hub publish or republish, run the security review gate in `references/publish-notes.md`; do not publish while unresolved secret/path findings remain.
 
 ## Change Strategy For Agents
 

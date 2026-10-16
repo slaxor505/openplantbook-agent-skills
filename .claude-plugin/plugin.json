@@ -1,8 +1,22 @@
 {
-  "name": "openplantbook-agent-skills",
+  "name": "openplantbook",
+  "displayName": "Open Plantbook",
   "version": "1.0.0",
-  "description": "Open Plantbook Agent Skills for plant search, care data, and authenticated API workflows",
+  "description": "Schema-first Open Plantbook API skill: search plants, read care thresholds, and manage user plants.",
   "author": {
-    "name": "Slava Pisarevskiy"
-  }
+    "name": "Slava Pisarevskiy",
+    "url": "https://github.com/slaxor505"
+  },
+  "homepage": "https://open.plantbook.io/docs/",
+  "repository": "https://github.com/slaxor505/openplantbook-agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "plants",
+    "openplantbook",
+    "plant-care",
+    "api",
+    "home-assistant"
+  ],
+  "documentationUrl": "https://github.com/slaxor505/openplantbook-agent-skills#readme",
+  "supportUrl": "https://github.com/slaxor505/openplantbook-agent-skills/issues"
 }
