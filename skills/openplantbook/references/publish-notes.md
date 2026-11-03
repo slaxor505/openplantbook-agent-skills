@@ -8,7 +8,7 @@ Use these notes when reviewing or publishing the `openplantbook` skill to ClawHu
 - Slug: `openplantbook`
 - Owner: `@slaxor505`
 - Author: `Slava Pisarevskiy`
-- Version: `1.0.0`
+- Version: `1.0.1`
 - Short description: `Schema-first Open Plantbook API workflows`
 - Homepage: `https://open.plantbook.io/docs/`
 - Suggested tags: `plants`, `openplantbook`, `api`, `home-assistant`, `care-data`
@@ -17,6 +17,12 @@ Suggested long description:
 
 ```text
 Open Plantbook gives agents a schema-first workflow for the Open Plantbook API. It can search plants, retrieve detail and care fields, and create authenticated user plants from schema-aligned dossier JSON without relying on an SDK or scraped HTML. The skill fetches the live OpenAPI schema before operations where endpoint shape or payload validation matters, keeps secrets out of output, and treats write/delete actions as external changes that need explicit user intent.
+```
+
+Suggested 1.0.1 changelog:
+
+```text
+Spec-clean frontmatter, clearer description, compatibility note, and skill-relative paths. Adds plugin icons and policy links. No change to helper behavior.
 ```
 
 Suggested first changelog:
@@ -92,9 +98,9 @@ Run these scans from the repository root and review any output before publishing
 ```bash
 PLATFORM_PATTERN='OPENCLAW|openclaw|[.]config|/home/|/Users/|apiKey|(^|[[:space:]/])[.]env($|[[:space:]/])|[*][.]env'
 CREDENTIAL_PATTERN='client_secret|OPENPLANTBOOK_API_KEY|OPENPLANTBOOK_OAUTH_CREDENTIALS|token'
-rg -n "$PLATFORM_PATTERN" plugins/openplantbook/skills/openplantbook skills/openplantbook -g '!**/references/publish-notes.md'
-rg -n "$CREDENTIAL_PATTERN" plugins/openplantbook/skills/openplantbook skills/openplantbook
-find plugins/openplantbook/skills/openplantbook -name '__pycache__' -o -name '*.pyc' -o -name '.env' -o -name '*.env'
+rg -n "$PLATFORM_PATTERN" skills/openplantbook -g '!**/references/publish-notes.md'
+rg -n "$CREDENTIAL_PATTERN" skills/openplantbook
+find skills/openplantbook -name '__pycache__' -o -name '*.pyc' -o -name '.env' -o -name '*.env'
 ```
 
 The `find` command should produce no output. The `rg` commands may show documented metadata, placeholders, and env-var names; investigate anything that looks like a local filesystem path, platform-specific config path, or literal secret value.
@@ -104,22 +110,24 @@ The `find` command should produce no output. The `rg` commands may show document
 Run from this repository root:
 
 ```bash
-python3 -m py_compile plugins/openplantbook/skills/openplantbook/scripts/openplantbook_cli.py
-python3 plugins/openplantbook/skills/openplantbook/scripts/openplantbook_cli.py --help
-find plugins/openplantbook/skills/openplantbook -type f | sort
+python3 tools/check.py
+python3 skills/openplantbook/scripts/openplantbook_cli.py --help
+find skills/openplantbook -type f | sort
 ```
 
 Expected file list:
 
 ```text
-plugins/openplantbook/skills/openplantbook/SKILL.md
-plugins/openplantbook/skills/openplantbook/agents/openai.yaml
-plugins/openplantbook/skills/openplantbook/references/publish-notes.md
-plugins/openplantbook/skills/openplantbook/scripts/openplantbook_cli.py
-plugins/openplantbook/skills/openplantbook/skill-card.md
+skills/openplantbook/SKILL.md
+skills/openplantbook/agents/openai.yaml
+skills/openplantbook/references/publish-notes.md
+skills/openplantbook/scripts/openplantbook_cli.py
+skills/openplantbook/skill-card.md
 ```
 
-If the generic AgentSkills validator rejects `homepage` or `user-invocable`, prefer OpenClaw's skill commands for this package. Those frontmatter keys are documented OpenClaw fields for hub/UI presentation.
+The frontmatter follows the Agent Skills spec. The one extension is `metadata.openclaw`, a nested object that ClawHub and OpenClaw read for gating (`requires`) and UI (`emoji`, `homepage`). Strict spec validators may flag that nested value; ClawHub requires it. `tools/check.py` allows it on purpose.
+
+ClawHub publishes every skill under MIT-0. This repository stays MIT; that is compatible, but the ClawHub listing will show MIT-0.
 
 ## Publish command template
 
@@ -133,7 +141,7 @@ clawhub whoami
 Then publish from the workspace:
 
 ```bash
-clawhub skill publish ./plugins/openplantbook/skills/openplantbook --version 1.0.0
+clawhub skill publish ./skills/openplantbook --version 1.0.1
 ```
 
 Select owner `@slaxor505` if the CLI prompts for an owner. ClawHub publishes under:
