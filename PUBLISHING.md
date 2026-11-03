@@ -145,7 +145,7 @@ gemini skills install https://github.com/slaxor505/openplantbook-agent-skills.gi
 
 Only the maintainer can do these:
 
-- [ ] Make the GitHub repo public (needed for the Anthropic directory).
+- [x] Make the GitHub repo public (needed for the Anthropic directory). Done.
 - [x] Add icon and logo. Done: both manifests point to the images in the `assets` folder.
 - [x] Add privacy policy and terms URLs. Done: both manifests have them.
 - [ ] Check the terms URL. It points to the Open Plantbook home page (`https://open.plantbook.io/`). If you have a dedicated terms page, change it in both `plugin.json` files.
