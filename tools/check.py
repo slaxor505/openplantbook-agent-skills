@@ -18,6 +18,7 @@ import ast
 import json
 import re
 import shutil
+import struct
 import subprocess
 import sys
 from pathlib import Path
@@ -182,6 +183,35 @@ def check_skill(rep: Report) -> str | None:
 
 
 SEMVER = re.compile(r"\d+\.\d+\.\d+(?:[-+][\w.-]+)?")
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+MAX_IMAGE_BYTES = 5 * 1024 * 1024  # Anthropic directory: every file in the plugin folder under 5 MiB
+
+
+def check_image(rep: Report, label: str, ref) -> tuple[int, int] | None:
+    """Check a manifest image reference. Returns (width, height) for a valid PNG."""
+    if not isinstance(ref, str) or not ref.startswith("./"):
+        rep.error(f"{label}: path must be a string starting with './', got {ref!r}")
+        return None
+    path = (ROOT / ref).resolve()
+    if ROOT not in path.parents:
+        rep.error(f"{label}: {ref} points outside the plugin folder")
+        return None
+    if not path.is_file():
+        rep.error(f"{label}: {ref} does not exist")
+        return None
+    data = path.read_bytes()
+    if data[:8] != PNG_SIGNATURE or data[-8:-4] != b"IEND":
+        rep.error(f"{label}: {ref} is not a complete PNG file")
+        return None
+    if len(data) > MAX_IMAGE_BYTES:
+        rep.error(f"{label}: {ref} is over 5 MiB")
+    width, height = struct.unpack(">II", data[16:24])
+    return width, height
+
+
+def check_url(rep: Report, label: str, value) -> None:
+    if not isinstance(value, str) or not value.startswith("https://"):
+        rep.error(f"{label}: must be an https URL, got {value!r}")
 
 
 def check_manifests(rep: Report, skill_version: str | None) -> None:
@@ -225,8 +255,15 @@ def check_manifests(rep: Report, skill_version: str | None) -> None:
         for field in ("documentationUrl", "supportUrl"):
             if not str(claude.get(field, "")).startswith("https://"):
                 rep.warn(f".claude-plugin/plugin.json: {field} is missing (used by Anthropic's directory listing)")
-        if not (ROOT / str(claude.get("icon", "")).lstrip("./")).is_file() or not claude.get("icon"):
-            rep.note("no plugin icon: add `icon` (PNG/SVG in the repo) to .claude-plugin/plugin.json for a nicer directory listing")
+        if claude.get("icon"):
+            check_image(rep, ".claude-plugin/plugin.json: icon", claude["icon"])
+        else:
+            rep.note("no icon in .claude-plugin/plugin.json: Anthropic's directory listing shows a default")
+        for field in ("privacyPolicyUrl", "termsOfServiceUrl"):
+            if claude.get(field):
+                check_url(rep, f".claude-plugin/plugin.json: {field}", claude[field])
+            else:
+                rep.note(f"no {field} in .claude-plugin/plugin.json (optional for the directory listing)")
 
     if codex:
         skills_path = ROOT / str(codex.get("skills", "")).lstrip("./")
@@ -241,11 +278,18 @@ def check_manifests(rep: Report, skill_version: str | None) -> None:
                     rep.error(f".codex-plugin/plugin.json: interface.{field} is required")
             if len(str(iface.get("shortDescription", ""))) > 125:
                 rep.error(".codex-plugin/plugin.json: interface.shortDescription must be 125 chars or fewer")
-            if not iface.get("composerIcon") or not iface.get("logo"):
-                rep.note("no OpenAI icons: add interface.composerIcon and interface.logo (PNG under assets/) before submitting")
-            for field in ("privacyPolicyURL", "termsOfServiceURL"):
-                if not iface.get(field):
-                    rep.note(f"OpenAI portal may ask for interface.{field}")
+            for field in ("composerIcon", "logo"):
+                if iface.get(field):
+                    size = check_image(rep, f".codex-plugin/plugin.json: interface.{field}", iface[field])
+                    if field == "composerIcon" and size and size[0] != size[1]:
+                        rep.note(f"interface.composerIcon is {size[0]}x{size[1]}; the OpenAI portal may prefer a square icon")
+                else:
+                    rep.note(f"no interface.{field} in .codex-plugin/plugin.json: the OpenAI portal asks for it")
+            for field in ("privacyPolicyURL", "termsOfServiceURL", "supportURL", "websiteURL"):
+                if iface.get(field):
+                    check_url(rep, f".codex-plugin/plugin.json: interface.{field}", iface[field])
+                else:
+                    rep.note(f"no interface.{field} in .codex-plugin/plugin.json: the OpenAI portal may ask for it")
 
     if claude_mp:
         if not isinstance(claude_mp.get("owner"), dict) or not claude_mp["owner"].get("name"):

@@ -8,7 +8,7 @@ Use these notes when reviewing or publishing the `openplantbook` skill to ClawHu
 - Slug: `openplantbook`
 - Owner: `@slaxor505`
 - Author: `Slava Pisarevskiy`
-- Version: `1.0.0`
+- Version: `1.0.1`
 - Short description: `Schema-first Open Plantbook API workflows`
 - Homepage: `https://open.plantbook.io/docs/`
 - Suggested tags: `plants`, `openplantbook`, `api`, `home-assistant`, `care-data`
@@ -17,6 +17,12 @@ Suggested long description:
 
 ```text
 Open Plantbook gives agents a schema-first workflow for the Open Plantbook API. It can search plants, retrieve detail and care fields, and create authenticated user plants from schema-aligned dossier JSON without relying on an SDK or scraped HTML. The skill fetches the live OpenAPI schema before operations where endpoint shape or payload validation matters, keeps secrets out of output, and treats write/delete actions as external changes that need explicit user intent.
+```
+
+Suggested 1.0.1 changelog:
+
+```text
+Spec-clean frontmatter, clearer description, compatibility note, and skill-relative paths. Adds plugin icons and policy links. No change to helper behavior.
 ```
 
 Suggested first changelog:
@@ -135,7 +141,7 @@ clawhub whoami
 Then publish from the workspace:
 
 ```bash
-clawhub skill publish ./skills/openplantbook --version 1.0.0
+clawhub skill publish ./skills/openplantbook --version 1.0.1
 ```
 
 Select owner `@slaxor505` if the CLI prompts for an owner. ClawHub publishes under:

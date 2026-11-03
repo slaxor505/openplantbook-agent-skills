@@ -1,6 +1,6 @@
 {
   "name": "openplantbook",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Schema-first Open Plantbook API skill: search plants, read care thresholds, and manage user plants.",
   "author": {
     "name": "Slava Pisarevskiy",
@@ -23,7 +23,10 @@
     "longDescription": "Search the Open Plantbook plant-care database by scientific or common name, read care thresholds such as light, temperature, soil moisture and humidity, and create, update or delete your own user plants. The skill reads the live OpenAPI schema before schema-sensitive work, keeps credentials out of output, and asks before any write or delete.",
     "developerName": "Slava Pisarevskiy",
     "category": "Developer Tools",
-    "capabilities": ["Read", "Write"],
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
     "websiteURL": "https://open.plantbook.io/",
     "supportURL": "https://github.com/slaxor505/openplantbook-agent-skills/issues",
     "defaultPrompt": [
@@ -31,6 +34,10 @@
       "Look up abelia chinensis in Open Plantbook in English.",
       "Create an Open Plantbook user plant from this dossier JSON."
     ],
-    "brandColor": "#2F855A"
+    "brandColor": "#2F855A",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/logo.png",
+    "privacyPolicyURL": "https://plantbook.io/privacy-policy-for-plantbook/",
+    "termsOfServiceURL": "https://open.plantbook.io/"
   }
 }

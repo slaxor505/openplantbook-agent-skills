@@ -29,7 +29,7 @@ license: MIT
 compatibility: Requires Python 3 and outbound HTTPS access to open.plantbook.io.
 metadata:
   author: Slava Pisarevskiy
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 ```
 

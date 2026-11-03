@@ -41,6 +41,12 @@ PLUGIN_FILES = [
     "README.md",
     "LICENSE",
 ]
+ASSET_DIR = ROOT / "assets"
+
+
+def asset_files() -> list[Path]:
+    """Images referenced by the manifests and the README."""
+    return sorted(p for p in ASSET_DIR.rglob("*") if p.is_file() and not p.is_symlink()) if ASSET_DIR.is_dir() else []
 
 
 def skill_files() -> list[Path]:
@@ -99,7 +105,7 @@ def main() -> int:
 
     skill_entries = [(p, f"{check.SKILL_NAME}/{p.relative_to(SKILL_DIR).as_posix()}") for p in skill_files()]
     plugin_entries = [(ROOT / name, name) for name in PLUGIN_FILES]
-    plugin_entries += [(p, p.relative_to(ROOT).as_posix()) for p in skill_files()]
+    plugin_entries += [(p, p.relative_to(ROOT).as_posix()) for p in skill_files() + asset_files()]
 
     build_zip(skill_zip, skill_entries)
     build_zip(plugin_zip, plugin_entries)

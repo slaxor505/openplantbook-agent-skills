@@ -86,7 +86,7 @@ Notes:
 
 - One public listing serves both ChatGPT and Codex.
 - The listing text comes from `.codex-plugin/plugin.json` → `interface`.
-- Still missing before submit (only you can supply them): logo and icon PNGs, privacy policy URL, terms of service URL. See [Open items](#open-items).
+- Icon, logo, privacy policy URL and terms URL are already set in `.codex-plugin/plugin.json`. The icon is 250x256 pixels, which is not square. The portal may ask for a square one.
 - OpenAI does not run Claude-style install prompts for credentials. A skills-only plugin that needs a credential may be questioned in review. OpenAI's suggested fix is an MCP server with OAuth, which is a bigger change. Decide this if review asks.
 - Direct install for testing: `codex plugin marketplace add slaxor505/openplantbook-agent-skills`.
 
@@ -108,7 +108,7 @@ Optional badge for the README:
 
 ```bash
 gh skill install slaxor505/openplantbook-agent-skills openplantbook
-gh skill install slaxor505/openplantbook-agent-skills openplantbook@v1.0.0   # pinned to a tag
+gh skill install slaxor505/openplantbook-agent-skills openplantbook@v1.0.1   # pinned to a tag
 ```
 
 Before the first release, run `gh skill publish` from a checkout. It validates against the Agent Skills spec and offers to turn on immutable releases and tag protection. It may flag the nested `metadata.openclaw` block (see [Known trade-offs](#known-trade-offs)).
@@ -119,7 +119,7 @@ Run the security gate in [publish-notes.md](skills/openplantbook/references/publ
 
 ```bash
 clawhub login
-clawhub skill publish ./skills/openplantbook --version 1.0.0
+clawhub skill publish ./skills/openplantbook --version 1.0.1
 ```
 
 ClawHub publishes every skill under MIT-0. This repo stays MIT.
@@ -146,7 +146,9 @@ gemini skills install https://github.com/slaxor505/openplantbook-agent-skills.gi
 Only the maintainer can do these:
 
 - [ ] Make the GitHub repo public (needed for the Anthropic directory).
-- [ ] Add a logo (PNG, square) and set `icon` in `.claude-plugin/plugin.json`, and `interface.composerIcon` and `interface.logo` in `.codex-plugin/plugin.json` (files under `assets/`).
-- [ ] Add privacy policy and terms URLs to `.codex-plugin/plugin.json` (`interface.privacyPolicyURL`, `interface.termsOfServiceURL`) and `.claude-plugin/plugin.json` (`privacyPolicyUrl`, `termsOfServiceUrl`).
+- [x] Add icon and logo. Done: both manifests point to the images in the `assets` folder.
+- [x] Add privacy policy and terms URLs. Done: both manifests have them.
+- [ ] Check the terms URL. It points to the Open Plantbook home page (`https://open.plantbook.io/`). If you have a dedicated terms page, change it in both `plugin.json` files.
+- [ ] Optional: a square icon at 512x512 or larger. The current one is 250x256.
 - [ ] Verify the OpenAI developer identity.
 - [ ] Test the skill on each surface after install (a read-only search is enough).

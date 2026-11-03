@@ -22,6 +22,7 @@ The repository root is one plugin. There is one copy of the skill.
 - `.codex-plugin/plugin.json`: OpenAI (ChatGPT and Codex) plugin manifest and listing text.
 - `.agents/plugins/marketplace.json`: repo-local Codex plugin marketplace entry.
 - `.agents/skills/openplantbook`: repo-scoped Codex skill pointer (symlink) to `skills/openplantbook`.
+- `assets/`: plugin icon and logo used by the manifests and README. Keep them PNG, and never name image files in backticks or code blocks in docs (Anthropic holds such plugins for review).
 - `tools/check.py`: validates the skill, manifests, and package hygiene.
 - `tools/package.py`: builds upload ZIPs in `dist/` (not committed).
 - `.github/workflows/`: `check.yml` runs the checks on pull requests; `release.yml` attaches ZIPs to a release when a `v*` tag is pushed.

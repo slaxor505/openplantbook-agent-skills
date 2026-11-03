@@ -1,6 +1,4 @@
-<p align="center">
-  <strong>Open Plantbook Agent Skills</strong>
-</p>
+![Plantbook: Grow plants easy](assets/logo.png)
 
 # Open Plantbook Agent Skills
 
@@ -105,6 +103,7 @@ The agent should not:
 ├── adapters/
 │   ├── anthropic-claude-web.md
 │   └── openai-codex-web.md
+├── assets/
 ├── skills/
 │   └── openplantbook/
 │       ├── SKILL.md
