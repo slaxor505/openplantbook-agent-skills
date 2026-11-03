@@ -86,7 +86,7 @@ Notes:
 
 - One public listing serves both ChatGPT and Codex.
 - The listing text comes from `.codex-plugin/plugin.json` → `interface`.
-- Icon, logo, privacy policy URL and terms URL are already set in `.codex-plugin/plugin.json`. The icon is 250x256 pixels, which is not square. The portal may ask for a square one.
+- Icon, logo, privacy policy URL and terms URL are already set in `.codex-plugin/plugin.json`. The icon is 512x512 pixels and the logo is 1427x512.
 - OpenAI does not run Claude-style install prompts for credentials. A skills-only plugin that needs a credential may be questioned in review. OpenAI's suggested fix is an MCP server with OAuth, which is a bigger change. Decide this if review asks.
 - Direct install for testing: `codex plugin marketplace add slaxor505/openplantbook-agent-skills`.
 
@@ -149,6 +149,6 @@ Only the maintainer can do these:
 - [x] Add icon and logo. Done: both manifests point to the images in the `assets` folder.
 - [x] Add privacy policy and terms URLs. Done: both manifests have them.
 - [ ] Check the terms URL. It points to the Open Plantbook home page (`https://open.plantbook.io/`). If you have a dedicated terms page, change it in both `plugin.json` files.
-- [ ] Optional: a square icon at 512x512 or larger. The current one is 250x256.
+- [x] Square icon at 512x512 or larger. Done: the icon is 512x512.
 - [ ] Verify the OpenAI developer identity.
 - [ ] Test the skill on each surface after install (a read-only search is enough).
