@@ -276,8 +276,9 @@ def check_manifests(rep: Report, skill_version: str | None) -> None:
             for field in ("displayName", "shortDescription", "longDescription", "developerName", "category"):
                 if not iface.get(field):
                     rep.error(f".codex-plugin/plugin.json: interface.{field} is required")
-            if len(str(iface.get("shortDescription", ""))) > 125:
-                rep.error(".codex-plugin/plugin.json: interface.shortDescription must be 125 chars or fewer")
+            if len(str(iface.get("shortDescription", ""))) > 30:
+                # OpenAI portal: "Subtitle must be 30 characters or fewer." (the subtitle is shortDescription)
+                rep.error(".codex-plugin/plugin.json: interface.shortDescription is the OpenAI listing subtitle, max 30 chars")
             for field in ("composerIcon", "logo"):
                 if iface.get(field):
                     size = check_image(rep, f".codex-plugin/plugin.json: interface.{field}", iface[field])

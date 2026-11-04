@@ -19,7 +19,7 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Open Plantbook",
-    "shortDescription": "Search plants and read care data from the Open Plantbook API",
+    "shortDescription": "Plant search and care data",
     "longDescription": "Search the Open Plantbook plant-care database by scientific or common name, read care thresholds such as light, temperature, soil moisture and humidity, and create, update or delete your own user plants. The skill reads the live OpenAPI schema before schema-sensitive work, keeps credentials out of output, and asks before any write or delete.",
     "developerName": "Slava Pisarevskiy",
     "category": "Developer Tools",

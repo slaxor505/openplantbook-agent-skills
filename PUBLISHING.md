@@ -90,6 +90,15 @@ Notes:
 - OpenAI does not run Claude-style install prompts for credentials. A skills-only plugin that needs a credential may be questioned in review. OpenAI's suggested fix is an MCP server with OAuth, which is a bigger change. Decide this if review asks.
 - Direct install for testing: `codex plugin marketplace add slaxor505/openplantbook-agent-skills`.
 
+First upload of 1.0.1 (November 2026) came back with four findings:
+
+| Finding | Status |
+|---------|--------|
+| "Subtitle must be 30 characters or fewer." | Fixed. The subtitle is `interface.shortDescription` in `.codex-plugin/plugin.json`. It is now 26 characters. `tools/check.py` enforces the limit. |
+| "We are not accepting more skills-only submissions at this time." | **Open. Not fixable in the package.** OpenAI has closed the "Skills only" type for now. Options: wait and resubmit, ask OpenAI when it reopens, or add a remote MCP server and submit with MCP. OpenAI says an MCP server cannot be added to a skills-only plugin later, so it must be in the first ZIP. |
+| "We couldn't confirm the selected category." | Open. Pick a category that matches the plugin's purpose and make the first sentence of `interface.longDescription` state it. |
+| "Review the plugin's privacy policy against the submission guidelines." | Open. Compare the policy at the URL in the manifest with OpenAI's plugin guidelines. |
+
 ### skills.sh
 
 There is no submission form. The skill appears on the leaderboard after people install it:
