@@ -29,7 +29,7 @@ Mitigation: Fetch `https://open.plantbook.io/api/schema/` before schema-sensitiv
 ## Reference(s): <br>
 - [Open Plantbook API docs](https://open.plantbook.io/docs/) <br>
 - [Open Plantbook schema endpoint](https://open.plantbook.io/api/schema/) <br>
-- [ClawHub skill page](https://clawhub.ai/slaxor505/openplantbook) <br>
+- [ClawHub skill page](https://clawhub.ai/slaxor505/skills/openplantbook) <br>
 
 ## Skill Output: <br>
 **Output Type(s):** [Markdown, JSON, shell commands, API payload summaries] <br>
@@ -38,7 +38,7 @@ Mitigation: Fetch `https://open.plantbook.io/api/schema/` before schema-sensitiv
 **Other Properties Related to Output:** [Requires Python 3 and Open Plantbook credentials for API calls. Read/search/detail can use token auth or OAuth. Write workflows require OAuth unless the live schema changes.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 <br>
+1.0.4 <br>
 
 ## Ethical Considerations: <br>
 Users should review generated API payloads before write operations, avoid publishing private plant/user data, and apply their organization's safety, security, and compliance requirements before deployment. <br>

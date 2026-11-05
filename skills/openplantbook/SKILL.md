@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires Python 3 and outbound HTTPS access to open.plantbook.io. API calls need Open Plantbook credentials in environment variables. Does not work in sandboxes without network access, such as the Claude API code execution tool.
 metadata:
   author: Slava Pisarevskiy
-  version: "1.0.1"
+  version: "1.0.4"
   openclaw: {"emoji":"🌿","homepage":"https://open.plantbook.io/docs/","requires":{"anyBins":["python3","python"]},"primaryEnv":"OPENPLANTBOOK_API_KEY"}
 ---
 

@@ -420,10 +420,32 @@ def check_claude_validator(rep: Report) -> None:
         rep.note("claude plugin validate passed")
 
 
+def check_listing_docs(rep: Report, version: str | None) -> None:
+    """The ClawHub card and publish notes name the version too. Keep them equal."""
+    if not version:
+        return
+    card = SKILL_DIR / "skill-card.md"
+    notes = SKILL_DIR / "references" / "publish-notes.md"
+    checks = [
+        (card, r"## Skill Version\(s\):[^\n]*\n\s*(\d+\.\d+\.\d+)", "skill-card.md 'Skill Version(s)'"),
+        (notes, r"- Version: `(\d+\.\d+\.\d+)`", "publish-notes.md 'Version'"),
+        (notes, r"clawhub skill publish [^\n]*--version (\d+\.\d+\.\d+)", "publish-notes.md 'clawhub skill publish --version'"),
+    ]
+    for path, pattern, label in checks:
+        if not path.is_file():
+            continue
+        match = re.search(pattern, path.read_text(encoding="utf-8"))
+        if not match:
+            rep.error(f"{rel(path)}: could not find {label}")
+        elif match.group(1) != version:
+            rep.error(f"{rel(path)}: {label} is {match.group(1)}, expected {version}")
+
+
 def run(tag: str | None = None, use_claude: bool = True) -> Report:
     rep = Report()
     version = check_skill(rep)
     check_manifests(rep, version)
+    check_listing_docs(rep, version)
     check_files(rep)
     check_secrets(rep)
     check_helper(rep)

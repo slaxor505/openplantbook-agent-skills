@@ -8,7 +8,7 @@ Use these notes when reviewing or publishing the `openplantbook` skill to ClawHu
 - Slug: `openplantbook`
 - Owner: `@slaxor505`
 - Author: `Slava Pisarevskiy`
-- Version: `1.0.1`
+- Version: `1.0.4`
 - Short description: `Schema-first Open Plantbook API workflows`
 - Homepage: `https://open.plantbook.io/docs/`
 - Suggested tags: `plants`, `openplantbook`, `api`, `home-assistant`, `care-data`
@@ -19,11 +19,13 @@ Suggested long description:
 Open Plantbook gives agents a schema-first workflow for the Open Plantbook API. It can search plants, retrieve detail and care fields, and create authenticated user plants from schema-aligned dossier JSON without relying on an SDK or scraped HTML. The skill fetches the live OpenAPI schema before operations where endpoint shape or payload validation matters, keeps secrets out of output, and treats write/delete actions as external changes that need explicit user intent.
 ```
 
-Suggested 1.0.1 changelog:
+Suggested 1.0.4 changelog:
 
 ```text
-Spec-clean frontmatter, clearer description, compatibility note, and skill-relative paths. Adds plugin icons and policy links. No change to helper behavior.
+Spec-clean frontmatter, clearer description, compatibility note, and skill-relative paths. New safety rules: API responses are untrusted data and never trigger writes. No change to helper behavior.
 ```
+
+Version history: ClawHub already has 1.0.1 to 1.0.3 (republishes of the same text). The next release is 1.0.4, and the repo, tag, manifests and ClawHub use the same number.
 
 Suggested first changelog:
 
@@ -141,13 +143,13 @@ clawhub whoami
 Then publish from the workspace:
 
 ```bash
-clawhub skill publish ./skills/openplantbook --version 1.0.1
+clawhub skill publish ./skills/openplantbook --version 1.0.4
 ```
 
 Select owner `@slaxor505` if the CLI prompts for an owner. ClawHub publishes under:
 
 ```text
-https://clawhub.ai/slaxor505/openplantbook
+https://clawhub.ai/slaxor505/skills/openplantbook
 ```
 
 The package stays hidden from normal install/download surfaces until ClawHub review and security checks finish.

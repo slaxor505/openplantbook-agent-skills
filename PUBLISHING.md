@@ -16,7 +16,7 @@ How to publish the `openplantbook` skill to each marketplace. Rules were checked
    ```
 
 3. Run the ClawHub security gate in [references/publish-notes.md](skills/openplantbook/references/publish-notes.md) if you publish there.
-4. Commit, push, then tag: `git tag v1.0.1 && git push origin v1.0.1`. The release workflow checks the tag against the version and attaches both ZIPs to a GitHub release.
+4. Commit, push, then tag: `git tag v1.0.4 && git push origin v1.0.4`. The release workflow checks the tag against the version and attaches both ZIPs to a GitHub release.
 
 `tools/package.py` writes to `dist/` (not committed):
 
@@ -146,7 +146,7 @@ Optional badge for the README:
 
 ```bash
 gh skill install slaxor505/openplantbook-agent-skills openplantbook
-gh skill install slaxor505/openplantbook-agent-skills openplantbook@v1.0.1   # pinned to a tag
+gh skill install slaxor505/openplantbook-agent-skills openplantbook@v1.0.4   # pinned to a tag
 ```
 
 Before the first release, run `gh skill publish` from a checkout. It validates against the Agent Skills spec and offers to turn on immutable releases and tag protection. It may flag the nested `metadata.openclaw` block (see [Known trade-offs](#known-trade-offs)).
@@ -157,8 +157,18 @@ Run the security gate in [publish-notes.md](skills/openplantbook/references/publ
 
 ```bash
 clawhub login
-clawhub skill publish ./skills/openplantbook --version 1.0.1
+clawhub skill publish ./skills/openplantbook --slug openplantbook --version 1.0.4 --changelog "<text>" --dry-run
 ```
+
+Run the same command without `--dry-run` when the plan looks right. Suggested changelog text is in `publish-notes.md`.
+
+Or import from GitHub in the ClawHub web UI. It reads the repository, so merge to `main` first. Notes (the UI was not visible from the session, so check these on screen):
+
+- The skill folder is `skills/openplantbook`, not the repo root. Pick that folder if the UI asks for a path.
+- Check the version the UI proposes. It must be 1.0.4. The version is set in `SKILL.md`, both `plugin.json` files, the skill card and the publish notes, and `tools/check.py` keeps them equal.
+- ClawHub already has 1.0.1 to 1.0.3, so those numbers cannot be used again.
+
+After publishing, installed users update with `openclaw skills update @slaxor505/openplantbook`. The listing is at <https://clawhub.ai/slaxor505/skills/openplantbook>.
 
 ClawHub publishes every skill under MIT-0. This repo stays MIT.
 

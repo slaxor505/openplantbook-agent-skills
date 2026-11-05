@@ -1,7 +1,7 @@
 {
   "name": "openplantbook",
   "displayName": "Open Plantbook",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Schema-first Open Plantbook API skill: search plants, read care thresholds, and manage user plants.",
   "author": {
     "name": "Slava Pisarevskiy",
