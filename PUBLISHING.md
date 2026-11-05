@@ -33,7 +33,7 @@ How to publish the `openplantbook` skill to each marketplace. Rules were checked
 | [Anthropic directory](#anthropic-directory-claudeai-cowork-claude-code) | GitHub repo (this repo root) | Automated scan + human review |
 | [Own Claude Code marketplace](#own-claude-code-marketplace) | Nothing. Already works. | None |
 | [claude.ai personal upload](#claudeai-personal-upload) | Skill ZIP | None |
-| [OpenAI (ChatGPT and Codex)](#openai-chatgpt-and-codex) | Plugin ZIP | Automated scan + human review |
+| [OpenAI (ChatGPT and Codex)](#openai-chatgpt-and-codex) | Plugin ZIP. **On hold**, see below. | Automated scan + human review |
 | [skills.sh](#skillssh) | Nothing. Listed after installs. | Automated audits |
 | [GitHub `gh skill`](#github-gh-skill) | Nothing. Tag a release. | None |
 | [ClawHub / OpenClaw](#clawhub--openclaw) | Skill folder | Automated security checks |
@@ -77,6 +77,8 @@ Limits:
 
 ### OpenAI (ChatGPT and Codex)
 
+**Status: on hold (November 2026).** OpenAI's portal says: "We are not accepting more skills-only submissions at this time." The decision is to skip the OpenAI directory for now. Revisit when OpenAI reopens skills-only plugins, or if a remote MCP server for Open Plantbook is built. Codex users can still install straight from GitHub (see the last note in this section). The steps below are kept for when this reopens.
+
 1. Verify your developer identity in OpenAI organization settings. You need Apps Management write access.
 2. Run `python3 tools/package.py`.
 3. Open <https://platform.openai.com/plugins> → **Create plugin** → **Skills only** → upload `dist/openplantbook-plugin-<version>.zip`.
@@ -95,9 +97,9 @@ First upload of 1.0.1 (November 2026) came back with four findings:
 | Finding | Status |
 |---------|--------|
 | "Subtitle must be 30 characters or fewer." | Fixed. The subtitle is `interface.shortDescription` in `.codex-plugin/plugin.json`. It is now 26 characters. `tools/check.py` enforces the limit. |
-| "We are not accepting more skills-only submissions at this time." | **Open. Not fixable in the package.** OpenAI has closed the "Skills only" type for now. Options: wait and resubmit, ask OpenAI when it reopens, or add a remote MCP server and submit with MCP. OpenAI says an MCP server cannot be added to a skills-only plugin later, so it must be in the first ZIP. |
-| "We couldn't confirm the selected category." | Open. Pick a category that matches the plugin's purpose and make the first sentence of `interface.longDescription` state it. |
-| "Review the plugin's privacy policy against the submission guidelines." | Open. Compare the policy at the URL in the manifest with OpenAI's plugin guidelines. |
+| "We are not accepting more skills-only submissions at this time." | **On hold. Not fixable in the package.** OpenAI has closed the "Skills only" type for now. Decision: skip OpenAI for now. Other options for later: ask OpenAI when it reopens, or add a remote MCP server and submit with MCP. OpenAI says an MCP server cannot be added to a skills-only plugin later, so it must be in the first ZIP. |
+| "We couldn't confirm the selected category." | Parked until OpenAI reopens. Pick a category that matches the plugin's purpose and make the first sentence of `interface.longDescription` state it. |
+| "Review the plugin's privacy policy against the submission guidelines." | Parked until OpenAI reopens. Compare the policy at the URL in the manifest with OpenAI's plugin guidelines. |
 
 ### skills.sh
 
@@ -159,5 +161,5 @@ Only the maintainer can do these:
 - [x] Add privacy policy and terms URLs. Done: both manifests have them.
 - [ ] Check the terms URL. It points to the Open Plantbook home page (`https://open.plantbook.io/`). If you have a dedicated terms page, change it in both `plugin.json` files.
 - [x] Square icon at 512x512 or larger. Done: the icon is 512x512.
-- [ ] Verify the OpenAI developer identity.
+- [ ] Verify the OpenAI developer identity. Parked: only needed if the OpenAI submission is resumed.
 - [ ] Test the skill on each surface after install (a read-only search is enough).

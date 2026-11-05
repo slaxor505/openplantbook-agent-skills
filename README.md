@@ -148,7 +148,7 @@ Key files:
 | Agent Skills tools (skills.sh, `gh skill`, Gemini CLI, Copilot, Cursor, and others) | `skills/openplantbook` | Portable skill folder |
 | Anthropic directory, Claude Code, claude.ai plugins | `.claude-plugin/` | Plugin and marketplace manifests. The repo root is the plugin folder |
 | claude.ai skill upload | `dist/openplantbook-skill-<version>.zip` | Built by `tools/package.py` |
-| OpenAI ChatGPT and Codex plugins | `.codex-plugin/`, `.agents/plugins/marketplace.json` | Listing text and repo marketplace. Upload ZIP built by `tools/package.py` |
+| OpenAI ChatGPT and Codex plugins | `.codex-plugin/`, `.agents/plugins/marketplace.json` | Listing text and repo marketplace. Upload ZIP built by `tools/package.py`. The OpenAI directory is not accepting skills-only plugins right now, so it is on hold |
 | OpenAI Codex web | `AGENTS.md`, `.agents/skills/openplantbook`, `CODEX_WEB.md` | Use repo instructions plus the repo-scoped skill pointer; fall back to explicitly reading `skills/openplantbook/SKILL.md` |
 | Anthropic Claude web | `CLAUDE_WEB.md`, `README.md`, `skills/openplantbook/SKILL.md` | Use Claude Project Instructions / Project Knowledge rather than duplicating the skill |
 | OpenClaw / ClawHub | `skills/openplantbook`, `OPENCLAW.md`, `skill-card.md` | Direct local install and ClawHub publication notes |
