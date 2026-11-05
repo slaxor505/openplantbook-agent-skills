@@ -33,7 +33,7 @@ How to publish the `openplantbook` skill to each marketplace. Rules were checked
 | [Anthropic directory](#anthropic-directory-claudeai-cowork-claude-code) | GitHub repo (this repo root) | Automated scan + human review |
 | [Own Claude Code marketplace](#own-claude-code-marketplace) | Nothing. Already works. | None |
 | [claude.ai personal upload](#claudeai-personal-upload) | Skill ZIP | None |
-| [OpenAI (ChatGPT and Codex)](#openai-chatgpt-and-codex) | Plugin ZIP. **On hold**, see below. | Automated scan + human review |
+| [OpenAI (ChatGPT and Codex)](#openai-chatgpt-and-codex) | Nothing. **Manual install** from GitHub. The directory is closed to skills-only plugins. | None |
 | [skills.sh](#skillssh) | Nothing. Listed after installs. | Automated audits |
 | [GitHub `gh skill`](#github-gh-skill) | Nothing. Tag a release. | None |
 | [ClawHub / OpenClaw](#clawhub--openclaw) | Skill folder | Automated security checks |
@@ -77,7 +77,35 @@ Limits:
 
 ### OpenAI (ChatGPT and Codex)
 
-**Status: on hold (November 2026).** OpenAI's portal says: "We are not accepting more skills-only submissions at this time." The decision is to skip the OpenAI directory for now. Revisit when OpenAI reopens skills-only plugins, or if a remote MCP server for Open Plantbook is built. Codex users can still install straight from GitHub (see the last note in this section). The steps below are kept for when this reopens.
+**Status: available via manual install.** OpenAI's directory is not accepting skills-only plugins right now. The portal said, in November 2026: "We are not accepting more skills-only submissions at this time." So the plugin is not listed in the OpenAI directory. Users install it themselves from GitHub. There is nothing to submit and no review.
+
+#### Manual install
+
+Codex CLI:
+
+```bash
+codex plugin marketplace add slaxor505/openplantbook-agent-skills
+```
+
+Then open `/plugins` in Codex, install **Open Plantbook**, and start a new session. Per OpenAI's docs, a marketplace added this way also shows up as a source in the Plugins directory of Codex in the ChatGPT desktop app.
+
+Skill only (Codex reads skills from its `.agents/skills` folders):
+
+```bash
+npx skills add slaxor505/openplantbook-agent-skills -a codex
+gh skill install slaxor505/openplantbook-agent-skills openplantbook --agent codex
+```
+
+Use one of the two, not both.
+
+Notes:
+
+- The commands come from OpenAI's and the tools' docs. They were not run here, because the `codex` CLI is not installed. The repo marketplace points at `./` (see [Known trade-offs](#known-trade-offs)).
+- The helper script needs Python 3, network access to `open.plantbook.io`, and credentials in environment variables (see the README). It works best in Codex. In ChatGPT chat the sandbox may not allow network access.
+
+#### Directory submission (parked)
+
+Revisit when OpenAI reopens skills-only plugins, or if a remote MCP server for Open Plantbook is built. OpenAI says an MCP server cannot be added to a skills-only plugin later, so it must be in the first ZIP. The steps are kept for then:
 
 1. Verify your developer identity in OpenAI organization settings. You need Apps Management write access.
 2. Run `python3 tools/package.py`.
@@ -89,17 +117,16 @@ Notes:
 - One public listing serves both ChatGPT and Codex.
 - The listing text comes from `.codex-plugin/plugin.json` → `interface`.
 - Icon, logo, privacy policy URL and terms URL are already set in `.codex-plugin/plugin.json`. The icon is 512x512 pixels and the logo is 1427x512.
-- OpenAI does not run Claude-style install prompts for credentials. A skills-only plugin that needs a credential may be questioned in review. OpenAI's suggested fix is an MCP server with OAuth, which is a bigger change. Decide this if review asks.
-- Direct install for testing: `codex plugin marketplace add slaxor505/openplantbook-agent-skills`.
+- OpenAI does not run Claude-style install prompts for credentials. A skills-only plugin that needs a credential may be questioned in review. OpenAI's suggested fix is an MCP server with OAuth, which is a bigger change.
 
 First upload of 1.0.1 (November 2026) came back with four findings:
 
 | Finding | Status |
 |---------|--------|
 | "Subtitle must be 30 characters or fewer." | Fixed. The subtitle is `interface.shortDescription` in `.codex-plugin/plugin.json`. It is now 26 characters. `tools/check.py` enforces the limit. |
-| "We are not accepting more skills-only submissions at this time." | **On hold. Not fixable in the package.** OpenAI has closed the "Skills only" type for now. Decision: skip OpenAI for now. Other options for later: ask OpenAI when it reopens, or add a remote MCP server and submit with MCP. OpenAI says an MCP server cannot be added to a skills-only plugin later, so it must be in the first ZIP. |
-| "We couldn't confirm the selected category." | Parked until OpenAI reopens. Pick a category that matches the plugin's purpose and make the first sentence of `interface.longDescription` state it. |
-| "Review the plugin's privacy policy against the submission guidelines." | Parked until OpenAI reopens. Compare the policy at the URL in the manifest with OpenAI's plugin guidelines. |
+| "We are not accepting more skills-only submissions at this time." | Not fixable in the package. OpenAI has closed the "Skills only" type for now. Decision: manual install only. Other options for later: ask OpenAI when it reopens, or add a remote MCP server and submit with MCP. |
+| "We couldn't confirm the selected category." | Parked until the directory reopens. Pick a category that matches the plugin's purpose and make the first sentence of `interface.longDescription` state it. |
+| "Review the plugin's privacy policy against the submission guidelines." | Parked until the directory reopens. Compare the policy at the URL in the manifest with OpenAI's plugin guidelines. |
 
 ### skills.sh
 
@@ -161,5 +188,5 @@ Only the maintainer can do these:
 - [x] Add privacy policy and terms URLs. Done: both manifests have them.
 - [ ] Check the terms URL. It points to the Open Plantbook home page (`https://open.plantbook.io/`). If you have a dedicated terms page, change it in both `plugin.json` files.
 - [x] Square icon at 512x512 or larger. Done: the icon is 512x512.
-- [ ] Verify the OpenAI developer identity. Parked: only needed if the OpenAI submission is resumed.
+- [ ] Verify the OpenAI developer identity. Parked: only needed if an OpenAI directory submission is resumed.
 - [ ] Test the skill on each surface after install (a read-only search is enough).
