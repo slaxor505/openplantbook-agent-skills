@@ -300,6 +300,7 @@ The skill is instructions plus one helper script. This is everything the helper 
 - **Network:** HTTPS requests to `https://open.plantbook.io` only. The host is fixed in the script and cannot be changed by an environment variable. Paths used: `/api/v1/plant/search`, `/api/v1/plant/detail/{pid}/`, `/api/schema/`, `/api/v1/token/`, and `/api/v1/plant/create`.
 - **Sends:** the search text, plant IDs, and plant fields the user asks for. Credentials go only to that host, as an `Authorization` header, or as a client ID and secret sent to the token endpoint.
 - **Reads:** the `OPENPLANTBOOK_*` environment variables, the private env file named by `OPENPLANTBOOK_ENV_FILE` (only the four credential names are read from it), and the dossier JSON file the user names for `create`.
+- **Credentials:** these are Open Plantbook credentials, for Open Plantbook's own API. The helper reads them from standard environment variables and sends them only to `open.plantbook.io`, the service they belong to. It does not use the `user_config` option, because Anthropic's plugin docs do not describe a way to hand a sensitive value to a script that a skill runs through the Bash tool.
 - **Never:** prints credentials, reads shell history or logs, or scrapes Open Plantbook web pages.
 
 Update and delete calls are described in `SKILL.md` as direct HTTP calls the agent makes with the user's approval. The helper script does not do them.
