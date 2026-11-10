@@ -298,7 +298,7 @@ The skill is instructions plus one helper script. This is everything the helper 
 
 - **Runs:** `python3 skills/openplantbook/scripts/openplantbook_cli.py`. It uses the Python standard library only. It installs no packages, downloads no code, starts no other programs, and writes no files.
 - **Network:** HTTPS requests to `https://open.plantbook.io` only. The host is fixed in the script and cannot be changed by an environment variable. Paths used: `/api/v1/plant/search`, `/api/v1/plant/detail/{pid}/`, `/api/schema/`, `/api/v1/token/`, and `/api/v1/plant/create`.
-- **Sends:** the search text, plant IDs, and plant fields the user asks for. Credentials go only to that host, as an `Authorization` header, or as a client ID and secret sent to the token endpoint.
+- **Sends:** the search text, plant IDs, and plant fields the user asks for. Credentials go only to that host, as an `Authorization` header, or as a client ID and secret sent to the token endpoint. The helper refuses HTTP redirects, so a redirect cannot carry credentials to another address.
 - **Reads:** the `OPENPLANTBOOK_*` environment variables, the private env file named by `OPENPLANTBOOK_ENV_FILE` (only the four credential names are read from it), and the dossier JSON file the user names for `create`.
 - **Never:** prints credentials, reads shell history or logs, or scrapes Open Plantbook web pages.
 
@@ -325,7 +325,7 @@ The skill is intentionally conservative:
 - Keep generated files, caches, logs, credentials, and local dossiers out of git.
 - There is one copy of the skill, in `skills/openplantbook/`. Do not add a second copy.
 - Bump the version in `SKILL.md`, `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json` together before a release.
-- Run `python3 tools/check.py` before every push. CI runs it on every pull request.
+- Run `python3 tools/check.py` and `python3 tools/test_helper.py` before every push. CI runs both on every pull request.
 
 ## Validation
 

@@ -38,7 +38,7 @@ Mitigation: Fetch `https://open.plantbook.io/api/schema/` before schema-sensitiv
 **Other Properties Related to Output:** [Requires Python 3 and Open Plantbook credentials for API calls. Read/search/detail can use token auth or OAuth. Write workflows require OAuth unless the live schema changes.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 <br>
+1.0.2 <br>
 
 ## Ethical Considerations: <br>
 Users should review generated API payloads before write operations, avoid publishing private plant/user data, and apply their organization's safety, security, and compliance requirements before deployment. <br>

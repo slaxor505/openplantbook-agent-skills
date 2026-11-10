@@ -25,6 +25,9 @@ jobs:
       - name: Check skill and manifests
         run: python3 tools/check.py --no-claude
 
+      - name: Test the helper script
+        run: python3 -B tools/test_helper.py
+
       - name: Build upload packages
         run: python3 tools/package.py --skip-check
 

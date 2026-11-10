@@ -29,7 +29,7 @@ license: MIT
 compatibility: Requires Python 3 and outbound HTTPS access to open.plantbook.io.
 metadata:
   author: Slava Pisarevskiy
-  version: "1.0.1"
+  version: "1.0.2"
 ---
 ```
 
@@ -54,6 +54,12 @@ python3 tools/check.py
 ```
 
 It needs PyYAML (`pip install pyyaml`). It checks the frontmatter, manifests, package hygiene, secrets, and the helper script. It also runs `claude plugin validate` when the `claude` CLI is installed.
+
+To run the helper tests (standard library only, no network):
+
+```bash
+python3 tools/test_helper.py
+```
 
 To build the upload ZIPs:
 
