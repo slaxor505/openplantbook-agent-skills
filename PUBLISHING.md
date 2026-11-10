@@ -16,7 +16,7 @@ How to publish the `openplantbook` skill to each marketplace. Rules were checked
    ```
 
 3. Run the ClawHub security gate in [references/publish-notes.md](skills/openplantbook/references/publish-notes.md) if you publish there.
-4. Commit, push, then tag: `git tag v1.0.1 && git push origin v1.0.1`. The release workflow checks the tag against the version and attaches both ZIPs to a GitHub release.
+4. Commit, push, then tag: `git tag v1.0.2 && git push origin v1.0.2`. The release workflow checks the tag against the version and attaches both ZIPs to a GitHub release.
 
 `tools/package.py` writes to `dist/` (not committed):
 
@@ -108,7 +108,7 @@ Optional badge for the README:
 
 ```bash
 gh skill install slaxor505/openplantbook-agent-skills openplantbook
-gh skill install slaxor505/openplantbook-agent-skills openplantbook@v1.0.1   # pinned to a tag
+gh skill install slaxor505/openplantbook-agent-skills openplantbook@v1.0.2   # pinned to a tag
 ```
 
 Before the first release, run `gh skill publish` from a checkout. It validates against the Agent Skills spec and offers to turn on immutable releases and tag protection. It may flag the nested `metadata.openclaw` block (see [Known trade-offs](#known-trade-offs)).
@@ -119,7 +119,7 @@ Run the security gate in [publish-notes.md](skills/openplantbook/references/publ
 
 ```bash
 clawhub login
-clawhub skill publish ./skills/openplantbook --version 1.0.1
+clawhub skill publish ./skills/openplantbook --version 1.0.2
 ```
 
 ClawHub publishes every skill under MIT-0. This repo stays MIT.

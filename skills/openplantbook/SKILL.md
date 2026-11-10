@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires Python 3 and outbound HTTPS access to open.plantbook.io. API calls need Open Plantbook credentials in environment variables. Does not work in sandboxes without network access, such as the Claude API code execution tool.
 metadata:
   author: Slava Pisarevskiy
-  version: "1.0.1"
+  version: "1.0.2"
   openclaw: {"emoji":"🌿","homepage":"https://open.plantbook.io/docs/","requires":{"anyBins":["python3","python"]},"primaryEnv":"OPENPLANTBOOK_API_KEY"}
 ---
 
@@ -17,7 +17,7 @@ Paths such as `scripts/openplantbook_cli.py` are relative to this skill's folder
 
 Open Plantbook is a community-sourced plant-care database. Its API supports API-key token authentication and OAuth2 client credentials. This skill uses direct HTTP against the live API schema; it does not require or depend on an SDK.
 
-The packaged helper sends authenticated requests only to the official Open Plantbook API host, `https://open.plantbook.io`. Do not configure alternate API hosts for real user credentials. If you need to test a fork, mock, or staging API, use separate throwaway credentials outside this published helper.
+The packaged helper sends authenticated requests only to the official Open Plantbook API host, `https://open.plantbook.io`, and refuses HTTP redirects so credentials cannot be forwarded to another address. Do not configure alternate API hosts for real user credentials. If you need to test a fork, mock, or staging API, use separate throwaway credentials outside this published helper.
 
 ## Schema-first rule
 

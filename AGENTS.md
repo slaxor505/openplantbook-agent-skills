@@ -25,6 +25,7 @@ The repository root is one plugin. There is one copy of the skill.
 - `assets/`: plugin icon and logo used by the manifests and README. Keep them PNG, and never name image files in backticks or code blocks in docs (Anthropic holds such plugins for review).
 - `tools/check.py`: validates the skill, manifests, and package hygiene.
 - `tools/package.py`: builds upload ZIPs in `dist/` (not committed).
+- `tools/test_helper.py`: standard-library tests for the helper script (redirects, output encoding).
 - `.github/workflows/`: `check.yml` runs the checks on pull requests; `release.yml` attaches ZIPs to a release when a `v*` tag is pushed.
 - `PUBLISHING.md`: per-marketplace publishing steps and open items.
 - `CODEX_WEB.md`: Codex web usage bridge.
@@ -35,6 +36,8 @@ The repository root is one plugin. There is one copy of the skill.
 
 - Validate everything (frontmatter, manifests, hygiene, secrets, helper):
   - `python3 tools/check.py`
+- Run the helper tests (no network, no dependencies):
+  - `python3 tools/test_helper.py`
 - Validate helper syntax only:
   - `python3 -m py_compile skills/openplantbook/scripts/openplantbook_cli.py`
 - Smoke-test helper interface:

@@ -21,11 +21,35 @@ from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
-from urllib.request import Request, urlopen
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 
 DEFAULT_API_BASE = "https://open.plantbook.io"
 USER_AGENT = "openplantbook-agent-skill/1.0 (+https://open.plantbook.io/docs/)"
+
+
+class _NoRedirectHandler(HTTPRedirectHandler):
+    """Refuse every redirect.
+
+    urllib copies the Authorization header onto the redirected request, even when
+    the new address is another host. The API does not need redirects, so refusing
+    them keeps API keys and OAuth tokens on DEFAULT_API_BASE.
+    """
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        raise HTTPError(req.full_url, code, f"redirect to {newurl} refused", headers, fp)
+
+
+_OPENER = build_opener(_NoRedirectHandler)
+
+
+def _configure_output() -> None:
+    """Print UTF-8 even when a pipe uses a legacy code page (common on Windows)."""
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
 
 
 def _parse_env_value(raw: str) -> str:
@@ -130,7 +154,7 @@ def _request_json(
         },
     )
     try:
-        with urlopen(request, timeout=30) as response:
+        with _OPENER.open(request, timeout=30) as response:
             status = response.status
             payload = response.read().decode("utf-8")
     except HTTPError as exc:
@@ -140,6 +164,13 @@ def _request_json(
             if return_status:
                 return exc.code, data
             return data
+        if 300 <= exc.code < 400:
+            print(
+                f"Open Plantbook API sent a redirect (HTTP {exc.code}). It was refused so "
+                f"credentials are only ever sent to {DEFAULT_API_BASE}.",
+                file=sys.stderr,
+            )
+            raise SystemExit(1) from exc
         print(f"Open Plantbook API returned HTTP {exc.code}: {body_text}", file=sys.stderr)
         raise SystemExit(1) from exc
     except URLError as exc:
@@ -421,6 +452,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    _configure_output()
     parser = build_parser()
     args = parser.parse_args()
     if isinstance(getattr(args, "userplant", None), str):
